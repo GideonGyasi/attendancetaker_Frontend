@@ -1,13 +1,9 @@
-// Simple typed API client for the attendance backend.
-// Adjust BASE_URL if your backend runs on a different host/port.
-
+// Simple typed API client for the attendance backend
 const BASE_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:4000";
-
-type Json = Record<string, unknown>;
 
 async function request<T>(
   path: string,
-  options: RequestInit = {},
+  options: RequestInit = {}
 ): Promise<T> {
   const res = await fetch(`${BASE_URL}${path}`, {
     headers: {
@@ -23,13 +19,12 @@ async function request<T>(
       const data = (await res.json()) as { error?: string };
       if (data?.error) message = data.error;
     } catch {
-      // ignore JSON parse error and use generic message
+      // ignore JSON parse error
     }
     throw new Error(message);
   }
 
-  // Some endpoints (CSV/PDF) will not return JSON; caller should use fetch directly.
-  return (res.status === 204 ? (undefined as T) : ((await res.json()) as T));
+  return res.status === 204 ? (undefined as T) : ((await res.json()) as T);
 }
 
 // ---- Sessions ----
@@ -55,11 +50,11 @@ export interface SessionResponse {
 }
 
 export async function createSession(
-  payload: CreateSessionPayload,
+  payload: CreateSessionPayload
 ): Promise<SessionResponse> {
   return request<SessionResponse>("/api/sessions", {
     method: "POST",
-    body: JSON.stringify(payload satisfies Json),
+    body: JSON.stringify(payload),
   });
 }
 
@@ -96,11 +91,11 @@ export interface AttendanceResponse {
 
 export async function submitAttendance(
   token: string,
-  payload: AttendancePayload,
+  payload: AttendancePayload
 ): Promise<AttendanceResponse> {
   return request<AttendanceResponse>(`/api/attendance/${token}`, {
     method: "POST",
-    body: JSON.stringify(payload satisfies Json),
+    body: JSON.stringify(payload),
   });
 }
 
@@ -114,16 +109,18 @@ export interface AuthResponse {
 export async function adminRegister(email: string, password: string) {
   return request<AuthResponse>("/api/auth/register", {
     method: "POST",
-    body: JSON.stringify({ email, password } satisfies Json),
+    body: JSON.stringify({ email, password }),
   });
 }
 
 export async function adminLogin(email: string, password: string) {
   return request<AuthResponse>("/api/auth/login", {
     method: "POST",
-    body: JSON.stringify({ email, password } satisfies Json),
+    body: JSON.stringify({ email, password }),
   });
 }
+
+// ---- Admin Dashboard ----
 
 export interface AdminSummary {
   totalSessions: number;
@@ -141,7 +138,7 @@ export interface AdminSessionRow {
   submissions: number;
 }
 
-function authHeaders() {
+function authHeaders(): Record<string, string> {
   const token = localStorage.getItem("adminToken");
   return token ? { Authorization: `Bearer ${token}` } : {};
 }
@@ -164,5 +161,3 @@ export async function deleteAdminSession(token: string): Promise<void> {
     headers: authHeaders(),
   });
 }
-
-

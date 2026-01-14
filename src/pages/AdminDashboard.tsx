@@ -31,8 +31,8 @@ export default function AdminDashboard() {
         ])
         setSummary(sum)
         setSessions(sess)
-      } catch (err: any) {
-        setError(err?.message || "Failed to load dashboard data")
+      } catch (err) {
+        console.log(err);
       } finally {
         setLoading(false)
       }
@@ -51,8 +51,8 @@ export default function AdminDashboard() {
         totalSessions: Math.max(prev.totalSessions - 1, 0),
         // totalSubmissions is approximate here; could be re-fetched if needed
       }))
-    } catch (err: any) {
-      setError(err?.message || "Failed to delete session")
+    } catch (err) {
+      console.log(err);
     }
   }
 

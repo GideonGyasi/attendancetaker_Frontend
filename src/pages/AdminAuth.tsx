@@ -26,8 +26,8 @@ export default function AdminAuth() {
       localStorage.setItem("adminToken", res.token)
       localStorage.setItem("adminEmail", res.email)
       navigate("/admin", { replace: true })
-    } catch (err: any) {
-      setError(err?.message || "Authentication failed")
+    } catch (err) {
+      console.log(err);
     } finally {
       setLoading(false)
     }
