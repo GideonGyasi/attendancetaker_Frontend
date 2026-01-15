@@ -138,11 +138,23 @@ export default function CreateSession() {
               />
             </div>
 
-            {center && (
-              <p className="text-xs text-slate-500">
-                Lat: {center.lat.toFixed(6)} | Lng: {center.lng.toFixed(6)}
-              </p>
-            )}
+          {center && (
+  <div className="flex flex-col md:flex-row items-start md:items-center gap-2 mt-2 bg-slate-800 p-3 rounded-lg border border-slate-700">
+    <div className="font-mono text-sm text-green-400 select-all">
+      Lat: {center.lat.toFixed(6)} | Lng: {center.lng.toFixed(6)}
+    </div>
+    <button
+      type="button"
+      onClick={() =>
+        navigator.clipboard.writeText(`Lat: ${center.lat.toFixed(6)}, Lng: ${center.lng.toFixed(6)}`)
+      }
+      className="px-2 py-1 rounded-md bg-green-600 hover:bg-green-500 text-xs font-medium transition"
+    >
+      Copy
+    </button>
+  </div>
+)}
+
           </div>
 
           {/* Duration */}
