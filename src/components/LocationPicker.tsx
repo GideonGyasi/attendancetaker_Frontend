@@ -1,9 +1,22 @@
-import { MapContainer, TileLayer, Marker, Circle } from "react-leaflet"
+import { MapContainer, TileLayer, Marker, Circle, useMap } from "react-leaflet"
 import type { LatLngLiteral } from "leaflet"
+import { useEffect } from "react"
 
 interface Props {
   center: LatLngLiteral | null
   radius: number
+}
+
+interface RecenterMapProps {
+  center: LatLngLiteral
+}
+
+function RecenterMap({ center }: RecenterMapProps) {
+  const map = useMap()
+  useEffect(() => {
+    map.setView(center, map.getZoom()) // keep current zoom
+  }, [center, map])
+  return null
 }
 
 export function LocationPicker({ center, radius }: Props) {
@@ -22,6 +35,7 @@ export function LocationPicker({ center, radius }: Props) {
 
       {center && (
         <>
+          <RecenterMap center={center} />
           <Marker position={center} />
           <Circle
             center={center}
