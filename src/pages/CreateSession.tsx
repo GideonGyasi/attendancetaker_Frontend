@@ -131,7 +131,7 @@ export default function CreateSession() {
               <input
                 type="range"
                 min={10}
-                max={300}
+                max={500000}
                 value={radius}
                 onChange={(e) => setRadius(Number(e.target.value))}
                 className="w-full"
