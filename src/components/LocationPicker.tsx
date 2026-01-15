@@ -25,7 +25,7 @@ export function LocationPicker({ center, radius }: Props) {
       center={center ?? fallback}
       zoom={18}
       scrollWheelZoom
-      className="h-[350px] w-full rounded-xl border border-slate-800 overflow-hidden"
+      className="h-[350px] w-full rounded-xl border border-gray-300 overflow-hidden shadow-sm"
     >
       <TileLayer
         attribution="&copy; OpenStreetMap contributors"
@@ -40,9 +40,10 @@ export function LocationPicker({ center, radius }: Props) {
             center={center}
             radius={radius}
             pathOptions={{
-              color: "red",
+              color: "#3b82f6",
               weight: 2,
-              fillOpacity: 0.25,
+              fillOpacity: 0.15,
+              fillColor: "#3b82f6",
             }}
           />
         </>

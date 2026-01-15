@@ -35,77 +35,116 @@ export function AttendanceModal({
   }
 
   return (
-    <div className="fixed inset-0 bg-black/60 flex items-center justify-center">
-      <div className="bg-slate-900 border border-slate-800 rounded-xl w-full max-w-md p-6">
-        <h2 className="text-xl font-semibold mb-4 text-slate-100">
-          Class Attendance
-        </h2>
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 backdrop-blur-sm">
+      <div className="bg-white border border-gray-200 rounded-2xl w-full max-w-md p-6 shadow-2xl animate-in slide-in-from-bottom-4 duration-300 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full -mr-10 -mt-10 opacity-50"></div>
+        <div className="relative z-10">
+          <div className="flex items-center justify-center mb-6">
+            <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg">
+              <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+          </div>
+          <h2 className="text-2xl font-bold text-center mb-6 text-gray-900 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            Class Attendance
+          </h2>
 
         {status === "checking" && (
-          <p className="text-slate-400">Checking your location...</p>
+          <div className="flex items-center gap-3 text-gray-600">
+            <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-600"></div>
+            <p>Checking your location...</p>
+          </div>
         )}
 
         {status === "denied" && (
-          <p className="text-red-400">
-            You are not in the class location. Please move closer and enable location services.
-          </p>
+          <div className="bg-red-50 border border-red-200 text-red-700 rounded-lg p-4">
+            <div className="flex items-center gap-2">
+              <svg className="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+              </svg>
+              <p className="font-medium">Location not allowed</p>
+            </div>
+            <p className="mt-2 text-sm">You are not in the class location. Please move closer and enable location services.</p>
+          </div>
         )}
 
         {status === "expired" && (
-          <p className="text-red-400">
-            Attendance for this class has already been taken. This link is no longer active.
-          </p>
+          <div className="bg-amber-50 border border-amber-200 text-amber-700 rounded-lg p-4">
+            <div className="flex items-center gap-2">
+              <svg className="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+              </svg>
+              <p className="font-medium">Session expired</p>
+            </div>
+            <p className="mt-2 text-sm">Attendance for this class has already been taken. This link is no longer active.</p>
+          </div>
         )}
 
         {status === "allowed" && (
           <div className="space-y-4">
             {submitted ? (
-              <div className="bg-green-900/40 border border-green-700 text-green-200 rounded-lg p-4">
-                {success || "Attendance recorded successfully."}
+              <div className="bg-green-50 border border-green-200 text-green-700 rounded-lg p-4">
+                <div className="flex items-center gap-2">
+                  <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <p className="font-medium">Success!</p>
+                </div>
+                <p className="mt-2 text-sm">{success || "Attendance recorded successfully."}</p>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
-                <input
-                  name="fullName"
-                  type="text"
-                  placeholder="Full Name"
-                  required
-                  className="w-full px-4 py-3 rounded-lg bg-slate-800 border border-slate-700"
-                />
+                <div>
+                  <input
+                    name="fullName"
+                    type="text"
+                    placeholder="Full Name"
+                    required
+                    className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                  />
+                </div>
 
-                <input
-                  name="studentNumber"
-                  type="text"
-                  placeholder="Student Number"
-                  required
-                  className="w-full px-4 py-3 rounded-lg bg-slate-800 border border-slate-700"
-                />
+                <div>
+                  <input
+                    name="studentNumber"
+                    type="text"
+                    placeholder="Student Number"
+                    required
+                    className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                  />
+                </div>
 
-                <input
-                  name="studentId"
-                  type="text"
-                  placeholder="Student ID"
-                  required
-                  className="w-full px-4 py-3 rounded-lg bg-slate-800 border border-slate-700"
-                />
+                <div>
+                  <input
+                    name="studentId"
+                    type="text"
+                    placeholder="Student ID"
+                    required
+                    className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                  />
+                </div>
 
-                <input
-                  name="indexNumber"
-                  type="text"
-                  placeholder="Index Number"
-                  required
-                  className="w-full px-4 py-3 rounded-lg bg-slate-800 border border-slate-700"
-                />
+                <div>
+                  <input
+                    name="indexNumber"
+                    type="text"
+                    placeholder="Index Number"
+                    required
+                    className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                  />
+                </div>
 
-                {error && <p className="text-red-400 text-sm">{error}</p>}
-                {success && !error && (
-                  <p className="text-green-400 text-sm">{success}</p>
+                {error && (
+                  <div className="bg-red-50 border border-red-200 text-red-700 rounded-lg p-3 text-sm">
+                    {error}
+                  </div>
                 )}
 
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="w-full bg-green-600 hover:bg-green-500 disabled:opacity-60 disabled:cursor-not-allowed transition py-3 rounded-lg font-medium"
+                  className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-60 disabled:cursor-not-allowed text-white transition-all py-3 rounded-lg font-medium shadow-sm hover:shadow-md"
                 >
                   {submitting ? "Submitting..." : "Submit Attendance"}
                 </button>
@@ -113,6 +152,7 @@ export function AttendanceModal({
             )}
           </div>
         )}
+        </div>
       </div>
     </div>
   )
