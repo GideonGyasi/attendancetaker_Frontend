@@ -1,6 +1,16 @@
 import React from 'react';
 
-const ConfirmationModal = ({
+interface ConfirmationModalProps {
+    isOpen: boolean;
+    onClose: () => void;
+    onConfirm: () => void;
+    title?: string;
+    message?: string;
+    confirmText?: string;
+    confirmButtonClass?: string;
+}
+
+const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
     isOpen,
     onClose,
     onConfirm,
@@ -10,6 +20,14 @@ const ConfirmationModal = ({
     confirmButtonClass = "bg-red-600 hover:bg-red-700"
 }) => {
     if (!isOpen) return null;
+
+    const handleClose = (): void => {
+        onClose();
+    };
+
+    const handleConfirm = (): void => {
+        onConfirm();
+    };
 
     return (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50 backdrop-blur-sm">
@@ -26,13 +44,15 @@ const ConfirmationModal = ({
                 <div className="flex gap-3 justify-center">
                     <button
                         className="px-6 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium transition-all hover:shadow-sm"
-                        onClick={onClose}
+                        onClick={handleClose}
+                        type="button"
                     >
                         Cancel
                     </button>
                     <button
                         className={`px-6 py-2 rounded-lg text-white font-medium transition-all shadow-sm hover:shadow-md ${confirmButtonClass}`}
-                        onClick={onConfirm}
+                        onClick={handleConfirm}
+                        type="button"
                     >
                         {confirmText}
                     </button>
