@@ -1,19 +1,31 @@
-import { MapContainer, TileLayer, Marker, Circle } from "react-leaflet"
+import { MapContainer, TileLayer, Marker, Circle, useMap } from "react-leaflet"
 import type { LatLngLiteral } from "leaflet"
+import { useEffect } from "react"
 
 interface Props {
   center: LatLngLiteral | null
   radius: number
 }
 
+function RecenterMap({ center }: { center: LatLngLiteral }) {
+  const map = useMap()
+
+  useEffect(() => {
+    map.setView(center, 18, { animate: true }) // ~300% zoom
+  }, [center, map])
+
+  return null
+}
+
 export function LocationPicker({ center, radius }: Props) {
+  const fallback = { lat: 5.6037, lng: -0.187 }
+
   return (
     <MapContainer
-      center={center ?? { lat: 5.6037, lng: -0.187 }} // fallback if location fails
+      center={center ?? fallback}
       zoom={18}
+      scrollWheelZoom
       className="h-[350px] w-full rounded-xl border border-slate-800 overflow-hidden"
-      scrollWheelZoom={true}
-      preferCanvas
     >
       <TileLayer
         attribution="&copy; OpenStreetMap contributors"
@@ -22,11 +34,16 @@ export function LocationPicker({ center, radius }: Props) {
 
       {center && (
         <>
+          <RecenterMap center={center} />
           <Marker position={center} />
           <Circle
             center={center}
             radius={radius}
-            pathOptions={{ color: "lime", weight: 2, fillOpacity: 0.15 }}
+            pathOptions={{
+              color: "red",
+              weight: 2,
+              fillOpacity: 0.25,
+            }}
           />
         </>
       )}
