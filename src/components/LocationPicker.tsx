@@ -7,11 +7,13 @@ interface Props {
   radius: number
 }
 
-function RecenterMap({ center }: { center: LatLngLiteral }) {
+function RecenterMap({ center }: { center: LatLngLiteral | null }) {
   const map = useMap()
 
   useEffect(() => {
-    map.setView(center, 18, { animate: true }) // ~300% zoom
+    if (center) {
+      map.setView(center, 18, { animate: true }) // ~300% zoom
+    }
   }, [center, map])
 
   return null
@@ -19,10 +21,11 @@ function RecenterMap({ center }: { center: LatLngLiteral }) {
 
 export function LocationPicker({ center, radius }: Props) {
   const fallback = { lat: 5.6037, lng: -0.187 }
+  const mapCenter = center || fallback
 
   return (
     <MapContainer
-      center={center ?? fallback}
+      center={mapCenter}
       zoom={18}
       scrollWheelZoom
       className="h-[350px] w-full rounded-xl border border-gray-300 overflow-hidden shadow-sm"
@@ -32,9 +35,10 @@ export function LocationPicker({ center, radius }: Props) {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
 
+      <RecenterMap center={center} />
+
       {center && (
         <>
-          <RecenterMap center={center} />
           <Marker position={center} />
           <Circle
             center={center}
