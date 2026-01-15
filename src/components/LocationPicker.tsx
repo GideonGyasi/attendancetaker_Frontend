@@ -5,18 +5,28 @@ import L from "leaflet"
 
 interface Props {
   center: LatLngLiteral | null
-  radius: number
+  radius: number // radius in meters
 }
 
 interface RecenterMapProps {
   center: LatLngLiteral
+  radius: number
 }
 
-function RecenterMap({ center }: RecenterMapProps) {
+function RecenterMap({ center, radius }: RecenterMapProps) {
   const map = useMap()
+  
   useEffect(() => {
-    map.setView(center, map.getZoom())
-  }, [center, map])
+    // Calculate appropriate zoom level based on radius
+    if (radius > 0) {
+      // For large radii, zoom out; for small radii, zoom in
+      const zoomForRadius = Math.max(10, Math.min(18, Math.floor(18 - Math.log2(radius / 50))))
+      map.setView(center, zoomForRadius)
+    } else {
+      map.setView(center, map.getZoom())
+    }
+  }, [center, radius, map])
+  
   return null
 }
 
@@ -35,6 +45,9 @@ const RedMarkerIcon = new L.DivIcon({
 })
 
 export function LocationPicker({ center, radius }: Props) {
+  // Ensure radius is within reasonable bounds and in meters
+  const validRadius = Math.max(10, Math.min(500000, radius))
+  
   return (
     <MapContainer
       center={center ?? { lat: 5.6037, lng: -0.187 }}
@@ -50,12 +63,17 @@ export function LocationPicker({ center, radius }: Props) {
 
       {center && (
         <>
-          <RecenterMap center={center} />
+          <RecenterMap center={center} radius={validRadius} />
           <Marker position={center} icon={RedMarkerIcon} />
           <Circle
             center={center}
-            radius={radius}
-            pathOptions={{ color: "lime", weight: 2, fillOpacity: 0.15 }}
+            radius={validRadius}
+            pathOptions={{ 
+              color: "lime", 
+              weight: 2, 
+              fillOpacity: 0.15,
+              fillColor: "lime"
+            }}
           />
         </>
       )}
