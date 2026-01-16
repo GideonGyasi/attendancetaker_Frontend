@@ -27,13 +27,23 @@ export default function AttendancePage() {
   const [submitted, setSubmitted] = useState(false)
   const [success, setSuccess] = useState<string | null>(null)
 
+  // ✅ ADDED: check localStorage on load
+  useEffect(() => {
+    if (!sessionId) return
+    const alreadySubmitted = localStorage.getItem(
+      `attendance_submitted_${sessionId}`
+    )
+    if (alreadySubmitted) {
+      setSubmitted(true)
+      setSuccess("You have already submitted attendance for this session.")
+    }
+  }, [sessionId])
+
   useEffect(() => {
     if (!sessionId) return
 
-    // Load session info from backend to confirm session is active and get class coordinates.
     getSessionInfo(sessionId)
       .then((info) => {
-        // If the session is no longer active, immediately show expired message.
         if (!info.isActive) {
           setLocationStatus("expired")
           return
@@ -44,9 +54,6 @@ export default function AttendancePage() {
           return
         }
 
-        // We only use session info for UX; backend remains source of truth.
-        // We don't expose exact coordinates here to keep URL simple.
-
         navigator.geolocation.getCurrentPosition(
           (pos) => {
             const student = {
@@ -54,7 +61,6 @@ export default function AttendancePage() {
               lng: pos.coords.longitude,
             }
 
-            // Compute distance between student and class center.
             const distance = calculateDistance(
               student.lat,
               student.lng,
@@ -86,6 +92,9 @@ export default function AttendancePage() {
   }) => {
     if (!sessionId || !sessionCenter) return
 
+    // ✅ ADDED: block repeat submission
+    if (submitted) return
+
     try {
       setSubmitting(true)
       setError(null)
@@ -97,10 +106,16 @@ export default function AttendancePage() {
         longitude: sessionCenter.lng,
       })
 
+      // ✅ ADDED: persist submission
+      localStorage.setItem(
+        `attendance_submitted_${sessionId}`,
+        "true"
+      )
+
       setSubmitted(true)
       setSuccess("Attendance recorded successfully.")
     } catch (err) {
-      console.log(err);
+      console.log(err)
     } finally {
       setSubmitting(false)
     }
