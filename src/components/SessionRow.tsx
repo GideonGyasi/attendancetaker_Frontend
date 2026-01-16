@@ -65,13 +65,13 @@ export default function SessionRow({
 
   return (
     <tr className="border-t border-gray-200 hover:bg-blue-50 transition-all duration-200 hover:shadow-sm group">
-      <td className="px-6 py-4 text-gray-900 font-semibold group-hover:text-blue-700 transition-colors">{courseName}</td>
-      <td className="px-6 py-4 text-gray-600 group-hover:text-gray-800 transition-colors">{dateLabel}</td>
-      <td className="px-6 py-4 text-gray-900 font-medium group-hover:text-blue-600 transition-colors">{radiusMeters}m</td>
-      <td className="px-6 py-4 text-gray-900 font-medium group-hover:text-green-600 transition-colors">{submissions}</td>
-      <td className="px-6 py-4">
+      <td className="px-4 sm:px-6 py-4 text-gray-900 font-semibold group-hover:text-blue-700 transition-colors">{courseName}</td>
+      <td className="px-4 sm:px-6 py-4 text-gray-600 group-hover:text-gray-800 transition-colors text-xs sm:text-sm">{dateLabel}</td>
+      <td className="px-4 sm:px-6 py-4 text-gray-900 font-medium group-hover:text-blue-600 transition-colors">{radiusMeters}m</td>
+      <td className="px-4 sm:px-6 py-4 text-gray-900 font-medium group-hover:text-green-600 transition-colors">{submissions}</td>
+      <td className="px-4 sm:px-6 py-4">
         <span
-          className={`px-3 py-1 rounded-full text-xs font-semibold transition-all duration-200 ${
+          className={`px-2 sm:px-3 py-1 rounded-full text-xs font-semibold transition-all duration-200 ${
             isActive
               ? "bg-green-100 text-green-800 group-hover:bg-green-200"
               : "bg-gray-100 text-gray-600 group-hover:bg-gray-200"
@@ -80,27 +80,31 @@ export default function SessionRow({
           {isActive ? "Active" : "Ended"}
         </span>
       </td>
-      <td className="px-6 py-4 text-right space-x-3">
-        <button
-          type="button"
-          onClick={downloadCsv}
-          className="text-blue-600 hover:text-blue-800 text-sm font-medium transition-all duration-200 hover:scale-105 flex items-center gap-1 px-2 py-1 rounded-md hover:bg-blue-50"
-        >
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-          </svg>
-          Download CSV
-        </button>
-        <button
-          type="button"
-          onClick={onDelete}
-          className="text-red-600 hover:text-red-800 text-sm font-medium transition-all duration-200 hover:scale-105 flex items-center gap-1 px-2 py-1 rounded-md hover:bg-red-50"
-        >
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-          </svg>
-          Delete
-        </button>
+      <td className="px-4 sm:px-6 py-4 text-right">
+        <div className="flex flex-col sm:flex-row gap-2 sm:space-x-3 justify-end">
+          <button
+            type="button"
+            onClick={downloadCsv}
+            className="text-blue-600 hover:text-blue-800 text-xs sm:text-sm font-medium transition-all duration-200 hover:scale-105 flex items-center gap-1 px-2 py-1 rounded-md hover:bg-blue-50"
+          >
+            <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            <span className="hidden sm:inline">Download CSV</span>
+            <span className="sm:hidden">CSV</span>
+          </button>
+          <button
+            type="button"
+            onClick={onDelete}
+            className="text-red-600 hover:text-red-800 text-xs sm:text-sm font-medium transition-all duration-200 hover:scale-105 flex items-center gap-1 px-2 py-1 rounded-md hover:bg-red-50"
+          >
+            <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+            </svg>
+            <span className="hidden sm:inline">Delete</span>
+            <span className="sm:hidden">Del</span>
+          </button>
+        </div>
       </td>
     </tr>
   )

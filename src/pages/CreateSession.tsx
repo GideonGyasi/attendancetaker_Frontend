@@ -15,6 +15,7 @@ export default function CreateSession() {
   const [error, setError] = useState("")
   const [shareableLink, setShareableLink] = useState("")
   const [loading, setLoading] = useState(false)
+  const [locationLoading, setLocationLoading] = useState(false)
   const [qrExpanded, setQrExpanded] = useState(false)
 
   const handleUseCurrentLocation = () => {
@@ -24,14 +25,21 @@ export default function CreateSession() {
     }
 
     setError("")
+    setLocationLoading(true)
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         setCenter({ lat: pos.coords.latitude, lng: pos.coords.longitude })
+        setLocationLoading(false)
       },
       () => {
         setError("Please enable location services and allow access to your location.")
+        setLocationLoading(false)
       },
-      { enableHighAccuracy: true }
+      { 
+        enableHighAccuracy: true, 
+        timeout: 10000, 
+        maximumAge: 60000 // Use cached position if less than 1 minute old
+      }
     )
   }
 
@@ -137,9 +145,17 @@ export default function CreateSession() {
             <button
               type="button"
               onClick={handleUseCurrentLocation}
-              className="mt-3 inline-flex items-center px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium transition-all shadow-sm hover:shadow-md"
+              disabled={locationLoading}
+              className="mt-3 inline-flex items-center px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white text-sm font-medium transition-all shadow-sm hover:shadow-md"
             >
-              Use my current location
+              {locationLoading ? (
+                <>
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                  Getting location...
+                </>
+              ) : (
+                "Use my current location"
+              )}
             </button>
 
             {/* Radius Slider */}
