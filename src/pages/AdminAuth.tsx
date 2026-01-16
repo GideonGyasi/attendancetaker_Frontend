@@ -5,7 +5,7 @@ import { adminLogin, adminRegister } from "../services/api"
 export default function AdminAuth() {
   const navigate = useNavigate()
   const [mode, setMode] = useState<"login" | "register">("login")
-  const [email, setEmail] = useState("")
+  const [email, setEmail] = useState(() => localStorage.getItem("adminEmail") || "")
   const [password, setPassword] = useState("")
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)

@@ -4,7 +4,7 @@ import { AttendanceModal } from "../components/AttendanceModal"
 import { getSessionInfo, submitAttendance } from "../services/api"
 import { calculateDistance } from "../services/location"
 
-type LocationStatus = "checking" | "allowed" | "denied" | "expired"
+type LocationStatus = "checking" | "allowed" | "denied" | "expired" | "already_submitted"
 
 export default function AttendancePage() {
   const { sessionId } = useParams<{ sessionId: string }>()
@@ -15,6 +15,13 @@ export default function AttendancePage() {
   const [locationStatus, setLocationStatus] = useState<LocationStatus>(() => {
     if (!sessionId) return "denied"
     if (!geolocationAvailable) return "denied"
+    
+    // Check if user has already submitted for this session
+    const submittedSessions = JSON.parse(localStorage.getItem('submittedSessions') || '[]')
+    if (submittedSessions.includes(sessionId)) {
+      return "already_submitted"
+    }
+    
     return "checking"
   })
 
@@ -96,6 +103,13 @@ export default function AttendancePage() {
         latitude: sessionCenter.lat,
         longitude: sessionCenter.lng,
       })
+
+      // Mark this session as submitted for this device
+      const submittedSessions = JSON.parse(localStorage.getItem('submittedSessions') || '[]')
+      if (!submittedSessions.includes(sessionId)) {
+        submittedSessions.push(sessionId)
+        localStorage.setItem('submittedSessions', JSON.stringify(submittedSessions))
+      }
 
       setSubmitted(true)
       setSuccess("Attendance recorded successfully.")

@@ -1,7 +1,7 @@
 import React from "react"
 
 type Props = {
-  status: "checking" | "allowed" | "denied" | "expired"
+  status: "checking" | "allowed" | "denied" | "expired" | "already_submitted"
   submitting: boolean
   error: string | null
   success: string | null
@@ -78,6 +78,18 @@ export function AttendanceModal({
               <p className="font-medium">Session expired</p>
             </div>
             <p className="mt-2 text-sm">Attendance for this class has already been taken. This link is no longer active.</p>
+          </div>
+        )}
+
+        {status === "already_submitted" && (
+          <div className="bg-blue-50 border border-blue-200 text-blue-700 rounded-lg p-4">
+            <div className="flex items-center gap-2">
+              <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <p className="font-medium">Already submitted</p>
+            </div>
+            <p className="mt-2 text-sm">You have already submitted attendance for this session. Each device can only submit once per session.</p>
           </div>
         )}
 
