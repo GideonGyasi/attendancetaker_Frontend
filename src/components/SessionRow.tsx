@@ -7,6 +7,7 @@ type Props = {
   endsAt: string
   submissions: number
   onDelete: () => void
+  onManualEntry: () => void
 }
 
 export default function SessionRow({
@@ -18,6 +19,7 @@ export default function SessionRow({
   endsAt,
   submissions,
   onDelete,
+  onManualEntry,
 }: Props) {
   const start = new Date(startsAt)
   const end = new Date(endsAt)
@@ -92,6 +94,17 @@ export default function SessionRow({
             </svg>
             <span className="hidden sm:inline">Download CSV</span>
             <span className="sm:hidden">CSV</span>
+          </button>
+          <button
+            type="button"
+            onClick={onManualEntry}
+            className="text-green-600 hover:text-green-800 text-xs sm:text-sm font-medium transition-all duration-200 hover:scale-105 flex items-center gap-1 px-2 py-1 rounded-md hover:bg-green-50"
+          >
+            <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+            </svg>
+            <span className="hidden sm:inline">Manual Entry</span>
+            <span className="sm:hidden">Add</span>
           </button>
           <button
             type="button"

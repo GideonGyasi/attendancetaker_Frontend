@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState, useEffect } from "react"
 
 type Props = {
   status: "checking" | "allowed" | "denied" | "expired"
@@ -9,8 +9,8 @@ type Props = {
   onSubmit: (data: {
     fullName: string
     studentNumber: string
-    studentId: string
     indexNumber: string
+    captchaAnswer: number
   }) => void
 }
 
@@ -22,15 +22,32 @@ export function AttendanceModal({
   submitted,
   onSubmit,
 }: Props) {
+  const [captchaQuestion, setCaptchaQuestion] = useState("")
+  const [captchaAnswer, setCaptchaAnswer] = useState(0)
+
+  useEffect(() => {
+    // Generate a simple math question
+    const num1 = Math.floor(Math.random() * 10) + 1
+    const num2 = Math.floor(Math.random() * 10) + 1
+    setCaptchaQuestion(`${num1} + ${num2} = ?`)
+    setCaptchaAnswer(num1 + num2)
+  }, [])
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const formData = new FormData(event.currentTarget)
 
+    const userAnswer = parseInt(String(formData.get("captcha") || "0"), 10)
+    if (userAnswer !== captchaAnswer) {
+      alert("Incorrect CAPTCHA answer. Please try again.")
+      return
+    }
+
     onSubmit({
       fullName: String(formData.get("fullName") || ""),
       studentNumber: String(formData.get("studentNumber") || ""),
-      studentId: String(formData.get("studentId") || ""),
       indexNumber: String(formData.get("indexNumber") || ""),
+      captchaAnswer: userAnswer,
     })
   }
 
@@ -117,19 +134,22 @@ export function AttendanceModal({
 
                 <div>
                   <input
-                    name="studentId"
+                    name="indexNumber"
                     type="text"
-                    placeholder="Student ID"
+                    placeholder="Index Number"
                     required
                     className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                   />
                 </div>
 
                 <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Security Check: {captchaQuestion}
+                  </label>
                   <input
-                    name="indexNumber"
-                    type="text"
-                    placeholder="Index Number"
+                    name="captcha"
+                    type="number"
+                    placeholder="Answer"
                     required
                     className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                   />
