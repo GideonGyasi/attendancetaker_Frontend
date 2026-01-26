@@ -16,8 +16,8 @@ async function request<T>(
   }
 
   const res = await fetch(`${BASE_URL}${path}`, {
-    headers,
     ...options,
+    headers,
   });
 
   if (!res.ok) {
