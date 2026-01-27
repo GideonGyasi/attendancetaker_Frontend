@@ -141,7 +141,12 @@ export default function CreateSession() {
               Current Location (Marker shows where attendance is allowed)
             </label>
 
-            <LocationPicker center={center} radius={radius} />
+            <LocationPicker
+              center={center}
+              radius={radius}
+              onChange={setCenter}
+            />
+
 
             <button
               type="button"

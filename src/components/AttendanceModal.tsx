@@ -75,15 +75,27 @@ export function AttendanceModal({
         )}
 
         {status === "denied" && (
-          <div className="bg-red-50 border border-red-200 text-red-700 rounded-lg p-4">
-            <div className="flex items-center gap-2">
-              <svg className="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
-              </svg>
-              <p className="font-medium">Location not allowed</p>
-            </div>
-            <p className="mt-2 text-sm">You are not in the class location. Please move closer and enable location services.</p>
-          </div>
+          <div className="flex justify-center">
+  <div className="bg-red-50 border border-red-200 text-red-700 rounded-lg p-4">
+    <div className="flex items-center gap-2">
+      <svg
+        className="w-5 h-5 text-red-600"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"
+        />
+      </svg>
+      <p className="font-medium">You are not in the class</p>
+    </div>
+  </div>
+</div>
+
         )}
 
         {status === "expired" && (
@@ -92,9 +104,9 @@ export function AttendanceModal({
               <svg className="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
               </svg>
-              <p className="font-medium">Session expired</p>
+              <p className="font-medium">Link expired</p>
             </div>
-            <p className="mt-2 text-sm">Attendance for this class has already been taken. This link is no longer active.</p>
+            <p className="mt-2 text-sm">Attendance for this class has already been taken.</p>
           </div>
         )}
 
