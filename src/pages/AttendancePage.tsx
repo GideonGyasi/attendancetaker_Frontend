@@ -54,30 +54,56 @@ export default function AttendancePage() {
           return
         }
 
-        navigator.geolocation.getCurrentPosition(
-          (pos) => {
-            const student = {
-              lat: pos.coords.latitude,
-              lng: pos.coords.longitude,
-            }
-
-            const distance = calculateDistance(
-              student.lat,
-              student.lng,
-              info.latitude,
-              info.longitude
-            )
-
-            if (distance > info.radiusMeters) {
+        // Request location permission explicitly
+        if (navigator.permissions) {
+          navigator.permissions.query({ name: 'geolocation' }).then((result) => {
+            if (result.state === 'denied') {
               setLocationStatus("denied")
-            } else {
-              setSessionCenter(student)
-              setLocationStatus("allowed")
+              return
             }
-          },
-          () => setLocationStatus("denied"),
-          { enableHighAccuracy: true }
-        )
+            // Proceed to get position
+            getPosition()
+          }).catch(() => {
+            // Fallback if permissions API not supported
+            getPosition()
+          })
+        } else {
+          getPosition()
+        }
+
+        function getPosition() {
+          navigator.geolocation.getCurrentPosition(
+            (pos) => {
+              const student = {
+                lat: pos.coords.latitude,
+                lng: pos.coords.longitude,
+              }
+
+              const distance = calculateDistance(
+                student.lat,
+                student.lng,
+                info.latitude,
+                info.longitude
+              )
+
+              if (distance > info.radiusMeters) {
+                setLocationStatus("denied")
+              } else {
+                setSessionCenter(student)
+                setLocationStatus("allowed")
+              }
+            },
+            (err) => {
+              console.error('Geolocation error:', err)
+              setLocationStatus("denied")
+            },
+            { 
+              enableHighAccuracy: true,
+              timeout: 10000,
+              maximumAge: 300000 // 5 minutes
+            }
+          )
+        }
       })
       .catch(() => {
         setLocationStatus("denied")
@@ -87,8 +113,8 @@ export default function AttendancePage() {
   const handleSubmit = async (data: {
     fullName: string
     studentNumber: string
-    studentId: string
     indexNumber: string
+    captchaAnswer: number
   }) => {
     if (!sessionId || !sessionCenter) return
 

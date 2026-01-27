@@ -8,6 +8,7 @@ interface ConfirmationModalProps {
     message?: string;
     confirmText?: string;
     confirmButtonClass?: string;
+    loading?: boolean;
 }
 
 const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
@@ -17,7 +18,8 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
     title = "Confirm Action",
     message = "Are you sure you want to proceed?",
     confirmText = "Confirm",
-    confirmButtonClass = "bg-red-600 hover:bg-red-700"
+    confirmButtonClass = "bg-red-600 hover:bg-red-700",
+    loading = false
 }) => {
     if (!isOpen) return null;
 
@@ -43,18 +45,23 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
                 <p className="text-gray-600 mb-6 text-center">{message}</p>
                 <div className="flex gap-3 justify-center">
                     <button
-                        className="px-6 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium transition-all hover:shadow-sm"
+                        className="px-6 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 disabled:opacity-60 disabled:cursor-not-allowed text-gray-700 font-medium transition-all hover:shadow-sm"
                         onClick={handleClose}
                         type="button"
+                        disabled={loading}
                     >
                         Cancel
                     </button>
                     <button
-                        className={`px-6 py-2 rounded-lg text-white font-medium transition-all shadow-sm hover:shadow-md ${confirmButtonClass}`}
+                        className={`px-6 py-2 rounded-lg text-white font-medium transition-all shadow-sm hover:shadow-md disabled:opacity-60 disabled:cursor-not-allowed flex items-center gap-2 ${confirmButtonClass}`}
                         onClick={handleConfirm}
                         type="button"
+                        disabled={loading}
                     >
-                        {confirmText}
+                        {loading && (
+                            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                        )}
+                        {loading ? "Processing..." : confirmText}
                     </button>
                 </div>
             </div>

@@ -16,6 +16,7 @@ export default function CreateSession() {
   const [shareableLink, setShareableLink] = useState("")
   const [loading, setLoading] = useState(false)
   const [locationLoading, setLocationLoading] = useState(false)
+  const [copied, setCopied] = useState(false)
   const [qrExpanded, setQrExpanded] = useState(false)
 
   const handleUseCurrentLocation = () => {
@@ -253,10 +254,14 @@ export default function CreateSession() {
                   </p>
                   <button
                     type="button"
-                    onClick={() => navigator.clipboard.writeText(shareableLink)}
+                    onClick={() => {
+                      navigator.clipboard.writeText(shareableLink)
+                      setCopied(true)
+                      setTimeout(() => setCopied(false), 2000)
+                    }}
                     className="self-start md:self-auto px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium transition-all shadow-sm"
                   >
-                    Copy link
+                    {copied ? "Copied!" : "Copy link"}
                   </button>
                 </div>
 

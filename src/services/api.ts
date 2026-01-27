@@ -16,8 +16,8 @@ async function request<T>(
   }
 
   const res = await fetch(`${BASE_URL}${path}`, {
-    headers,
     ...options,
+    headers,
   });
 
   if (!res.ok) {
@@ -85,7 +85,6 @@ export async function getSessionInfo(token: string): Promise<SessionInfo> {
 export interface AttendancePayload {
   fullName: string;
   studentNumber: string;
-  studentId: string;
   indexNumber: string;
   latitude: number;
   longitude: number;
@@ -165,6 +164,23 @@ export async function getAdminSessions(): Promise<AdminSessionRow[]> {
 export async function deleteAdminSession(token: string): Promise<void> {
   return request<void>(`/api/admin/sessions/${token}`, {
     method: "DELETE",
+    headers: authHeaders(),
+  });
+}
+
+export interface ManualAttendancePayload {
+  fullName: string;
+  studentNumber: string;
+  indexNumber: string;
+}
+
+export async function submitManualAttendance(
+  token: string,
+  payload: ManualAttendancePayload
+): Promise<AttendanceResponse> {
+  return request<AttendanceResponse>(`/api/admin/sessions/${token}/attendance`, {
+    method: "POST",
+    body: JSON.stringify(payload),
     headers: authHeaders(),
   });
 }
