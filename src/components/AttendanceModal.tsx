@@ -34,7 +34,7 @@ export function AttendanceModal({
   }, [])
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
+     event.preventDefault()
     const formData = new FormData(event.currentTarget)
 
     const userAnswer = parseInt(String(formData.get("captcha") || "0"), 10)
